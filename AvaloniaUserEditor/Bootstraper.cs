@@ -11,6 +11,7 @@ public static class Bootstraper
         services.Register<MainViewModel>(()=>new MainViewModel(
             Locator.Current.GetService<IShared>()
             ));
+        services.Register<MainWindow>(() => new MainWindow());
         services.Register<IShared>(()=>new Shared());
     }
 }

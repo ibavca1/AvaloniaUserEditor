@@ -1,6 +1,0 @@
-namespace AvaloniaUserEditor.Infrastructure;
-
-public class DependencyExtentions
-{
-    
-}

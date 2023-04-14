@@ -2,52 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using AvaloniaUserEditor.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Material.Dialog;
 
 namespace AvaloniaUserEditor.ViewModels;
 
-public class LoginViewModel:ObservableObject
+public partial class LoginViewModel:ObservableObject
 {
-    private readonly Func<IAsyncEnumerable<string>> _commandHandler;
+    private readonly Func<TextFieldDialogResult> _commandHandler;
 
-    private string _header;
-    private ICommand _command;
+    [ObservableProperty]
+    public string header;
+    [ObservableProperty]
+    public ICommand command;
 
-    public ICommand Command
+    [ObservableProperty]
+    public TextFieldDialogResult result; 
+
+    public LoginViewModel(string header, Func<TextFieldDialogResult> handler)
     {
-        get => _command;
-        set
-        {
-            _command = value;
-            OnPropertyChanged();
-        }
-    }
-    private string _result; 
-    public string? Result
-    {
-        get => _result;
-        set
-        {
-            _result = value;
-            OnPropertyChanged();
-        }
-    }
-    public LoginViewModel(string header, Func<IAsyncEnumerable<string>> handler)
-    {
-        _header = header;
+        result = new TextFieldDialogResult();
+        Header = header;
         _commandHandler = handler;
-        _command = new RelayCommand(OnExecuteCommandHandler);
+        Command = new RelayCommand(OnExecuteCommandHandler);
     }
 
-    private async void OnExecuteCommandHandler()
+    private void OnExecuteCommandHandler()
     {
-        Result = "Waiting result...";
-        var builder = new StringBuilder();
-        await foreach (var str in _commandHandler())
+        /*var account = Result.GetFieldsResult()[0];
+        var password = Result.GetFieldsResult()[1];*/
+        //var builder = new StringBuilder();
+        
+        /*await foreach (var str in _commandHandler())
         {
             builder.AppendLine(str);
             Result = builder.ToString();
-        }
+        }*/
     }
 }

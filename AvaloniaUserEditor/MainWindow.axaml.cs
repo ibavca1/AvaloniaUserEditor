@@ -12,6 +12,14 @@ public partial class MainWindow : Window
     {
         AvaloniaXamlLoader.Load(this);
     }
+
+    protected override void OnLoaded()
+    {
+        base.OnLoaded();
+        var vm = Locator.Current.GetService<MainViewModel>();
+        vm.LoginViewModel.command.Execute(vm.LoginDialog);
+    }
+
     public MainWindow()
     {
         InitializeComponentCustom();

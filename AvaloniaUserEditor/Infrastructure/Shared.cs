@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http;
 using AvaloniaUserEditor.Models;
 using Newtonsoft.Json.Linq;
 using Refit;
@@ -9,6 +11,7 @@ public class Shared: IShared
     public RefitSettings JsonSetting { get; }
     public IApi Api { get; }
 
+    public Token Token { get; set; }
     public Shared()
     {
         JsonSetting = new RefitSettings(new NewtonsoftJsonContentSerializer());
@@ -21,19 +24,25 @@ public class Shared: IShared
             ["UserName"] = name,
             ["Password"] = password
         };
-        var token = Api.Login(user).Result;
-        if (token is null)
+        TokenDto? tokenDto = null;
+        try
+        {
+            tokenDto = Api.Login(user).Result;
+        }
+        catch (Exception e)
         {
             return new ValidateUserResult
             {
                 IsValid = false,
-                Message = "Invalid user name or password."
+                Message = e.Message //"Invalid user name or password."
             };
         }
+        
+        this.Token = tokenDto.ToToken();
         return new ValidateUserResult
         {
             IsValid = true,
-            Message = "Ok"
+            Message = "200"
         };
     }
 }

@@ -12,18 +12,5 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
     }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            Bootstraper.Register(Locator.CurrentMutable, Locator.Current);
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = Locator.Current.GetService<MainViewModel>()
-            };
-        }
-
-        base.OnFrameworkInitializationCompleted();
-    }
+    
 }

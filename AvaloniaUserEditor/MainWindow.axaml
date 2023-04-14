@@ -12,7 +12,9 @@
         <vm:MainViewModel />
     </Design.DataContext>
     <Grid>
-        <dialogHost:DialogHost CloseOnClickAway="False" IsOpen="True">
+        <!--<dialogHost:DialogHost Identifier="LoginDialog " 
+                               CloseOnClickAway="False" 
+                               IsOpen="{Binding IsOpen}">
             <dialogHost:DialogHost.DialogContent>
                 <StackPanel>
                     <TextBox wpf:TextFieldAssist.Label="Username"
@@ -24,7 +26,6 @@
                              PasswordChar="⬤"
                              Classes="dense revealPasswordButton"
                              Text="{Binding Password}">
-                        
                     </TextBox>
                     <Button Margin="0 8 0 0"
                             Command="{Binding DialogClose}">
@@ -32,6 +33,6 @@
                     </Button>   
                 </StackPanel>
             </dialogHost:DialogHost.DialogContent>
-        </dialogHost:DialogHost>        
+        </dialogHost:DialogHost>    -->    
     </Grid>
 </Window>
