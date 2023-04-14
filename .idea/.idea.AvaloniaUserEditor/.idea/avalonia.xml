@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="AvaloniaUserEditor/App.axaml" value="AvaloniaUserEditor/AvaloniaUserEditor.csproj" />
+        <entry key="AvaloniaUserEditor/Components/UserCard.axaml" value="AvaloniaUserEditor/AvaloniaUserEditor.csproj" />
         <entry key="AvaloniaUserEditor/MainWindow.axaml" value="AvaloniaUserEditor/AvaloniaUserEditor.csproj" />
       </map>
     </option>

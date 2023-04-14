@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+        xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
         xmlns:vm="clr-namespace:AvaloniaUserEditor.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaUserEditor.MainWindow"
@@ -11,9 +12,25 @@
         <vm:MainViewModel />
     </Design.DataContext>
     <Grid>
-        <dialogHost:DialogHost CloseOnClickAway="True" IsOpen="True">
+        <dialogHost:DialogHost CloseOnClickAway="False" IsOpen="True">
             <dialogHost:DialogHost.DialogContent>
-            <TextBlock Text="{Binding Gretting}"/>
+                <StackPanel>
+                    <TextBox wpf:TextFieldAssist.Label="Username"
+                             Width="200"
+                             Classes="dense clearButton"
+                             Text="{Binding UserName}"/>
+                    <TextBox wpf:TextFieldAssist.Label="Password"
+                             Width="200"
+                             PasswordChar="⬤"
+                             Classes="dense revealPasswordButton"
+                             Text="{Binding Password}">
+                        
+                    </TextBox>
+                    <Button Margin="0 8 0 0"
+                            Command="{Binding DialogClose}">
+                        LOGIN
+                    </Button>   
+                </StackPanel>
             </dialogHost:DialogHost.DialogContent>
         </dialogHost:DialogHost>        
     </Grid>
