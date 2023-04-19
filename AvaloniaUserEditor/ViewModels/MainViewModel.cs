@@ -15,29 +15,31 @@ using DialogHostAvalonia;
 using Material.Dialog;
 using Material.Dialog.Enums;
 using Material.Dialog.Icons;
+using Material.Dialog.Interfaces;
 using Splat;
 
 namespace AvaloniaUserEditor.ViewModels;
 
-public partial class MainViewModel:ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     private IShared _shared;
+    private string messageUserName => "Неверное имя пользователя.";
+    private string messagePassword => "Неправельный пароль.";
     [ObservableProperty] public string? userName;
 
     [ObservableProperty] public string? password;
     [ObservableProperty] public bool? isOpen;
     public LoginViewModel LoginViewModel { get; }
+
     public MainViewModel(IShared shared)
     {
         _shared = shared;
         LoginViewModel = new LoginViewModel("Login", LoginDialog);
-        
-        //_loginViewModel.Command.Execute(LoginDialog);
-        //dialogClose = DialogClosingHandlerCommand;
-
     }
 
-    public TextFieldDialogResult LoginDialog()
+    public IDialogWindow<TextFieldDialogResult> DialogWindow;
+
+    public async IAsyncEnumerable<string> LoginDialog()
     {
         var result = DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams
         {
@@ -47,7 +49,7 @@ public partial class MainViewModel:ObservableObject
             DialogHeaderIcon = DialogIconKind.Blocked,
             Borderless = true,
             Width = 400,
-            TextFields = new []
+            TextFields = new[]
             {
                 new TextFieldBuilderParams
                 {
@@ -65,7 +67,7 @@ public partial class MainViewModel:ObservableObject
                     MaxCountChars = 64,
                     FieldKind = TextFieldKind.Masked,
                     MaskChar = '⬤',
-                    Validater = ValidatePassword,                    
+                    Validater = ValidatePassword,
                 }
             },
             DialogButtons = new[]
@@ -83,42 +85,44 @@ public partial class MainViewModel:ObservableObject
                     IsPositive = true
                 }
             }
-        }).ShowDialog(Program.MainWindow);
-        var formResult = result.Result;
+        });
+
+        var formResult = await result.ShowDialog(Program.MainWindow);
+
         if (formResult.GetResult != nameof(LoginButtonResult.Ok))
         {
-            //TODO: Exit application 
             Environment.Exit(0);
         }
 
-        return formResult;
-        /*yield return $"Account: {result.GetFieldsResult()[0]}";
-        yield return $"Password: {result.GetFieldsResult()[1]}";*/
+        ValidateUserResult? serverResult = null;
+        try
+        {
+            userName = formResult.GetFieldsResult()[0].Text;
+            password = formResult.GetFieldsResult()[1].Text;
+            serverResult = _shared.ValidateUser(userName, password);            
+        }
+        catch (Exception e)
+        {
+            //TODO: Установить сообщение о ошибке авторизации пользователя
+        }
+        
+        if (!serverResult.IsValid)
+        {
+            LoginViewModel.Command.Execute(LoginDialog);
+        }
+
+        yield return $"{formResult.GetFieldsResult()[0]}";
     }
 
     private Tuple<bool, string> ValidateAccount(string text)
     {
         var result = text.Length >= 1;
-        return new Tuple<bool, string>(result, result ? "" : "Too few account name");
+        return new Tuple<bool, string>(result, result ? "" : messageUserName);
     }
+
     private Tuple<bool, string> ValidatePassword(string text)
     {
         var result = text.Length >= 1;
-        return new Tuple<bool, string>(result, result ? "" : "Field should be filled.");
+        return new Tuple<bool, string>(result, result ? "" : messagePassword);
     }
-    /*[ObservableProperty]
-    public ICommand dialogClose; 
-    [RelayCommand]
-    public void DialogClosingHandler()
-    {
-        var result = _shared.ValidateUser(userName, password);
-        if (!result.IsValid)
-        {
-            IsOpen = true;
-            //var idet = DialogHost.;
-        }
-
-        IsOpen = false;
-        //    DialogHost.Show(new User(), "LoginDialogClosingHandler");
-    }*/
 }

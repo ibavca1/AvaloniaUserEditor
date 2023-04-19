@@ -11,7 +11,7 @@ namespace AvaloniaUserEditor.ViewModels;
 
 public partial class LoginViewModel:ObservableObject
 {
-    private readonly Func<TextFieldDialogResult> _commandHandler;
+    private readonly Func<IAsyncEnumerable<string>> _commandHandler;
 
     [ObservableProperty]
     public string header;
@@ -19,26 +19,23 @@ public partial class LoginViewModel:ObservableObject
     public ICommand command;
 
     [ObservableProperty]
-    public TextFieldDialogResult result; 
+    public string? result; 
 
-    public LoginViewModel(string header, Func<TextFieldDialogResult> handler)
+    public LoginViewModel(string header, Func<IAsyncEnumerable<string>> handler)
     {
-        result = new TextFieldDialogResult();
         Header = header;
         _commandHandler = handler;
         Command = new RelayCommand(OnExecuteCommandHandler);
     }
 
-    private void OnExecuteCommandHandler()
+    private async void OnExecuteCommandHandler()
     {
-        /*var account = Result.GetFieldsResult()[0];
-        var password = Result.GetFieldsResult()[1];*/
-        //var builder = new StringBuilder();
+        var builder = new StringBuilder();
         
-        /*await foreach (var str in _commandHandler())
+        await foreach (var str in _commandHandler())
         {
             builder.AppendLine(str);
             Result = builder.ToString();
-        }*/
+        }
     }
 }
