@@ -15,7 +15,7 @@ public class Shared: IShared
     public Shared()
     {
         JsonSetting = new RefitSettings(new NewtonsoftJsonContentSerializer());
-        Api = RestService.For<IApi>("http://172.24.6.63:8000", JsonSetting);
+        Api = RestService.For<IApi>("http://172.24.2.14 :8000", JsonSetting);
     }
     public ValidateUserResult ValidateUser(string name, string password)
     {
@@ -28,6 +28,12 @@ public class Shared: IShared
         try
         {
             tokenDto = Api.Login(user).Result;
+            this.Token = tokenDto.ToToken();
+            return new ValidateUserResult
+            {
+                IsValid = true,
+                Message = "200"
+            };
         }
         catch (Exception e)
         {
@@ -37,12 +43,5 @@ public class Shared: IShared
                 Message = e.Message //"Invalid user name or password."
             };
         }
-        
-        this.Token = tokenDto.ToToken();
-        return new ValidateUserResult
-        {
-            IsValid = true,
-            Message = "200"
-        };
     }
 }
