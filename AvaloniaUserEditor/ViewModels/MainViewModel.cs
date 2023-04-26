@@ -23,6 +23,7 @@ namespace AvaloniaUserEditor.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private IShared _shared;
+    private bool _validationResult = false;
     private string messageUserName => "Неверное имя пользователя.";
     private string messagePassword => "Неправельный пароль.";
     [ObservableProperty] public string? userName;
@@ -104,6 +105,7 @@ public partial class MainViewModel : ObservableObject
         catch (Exception e)
         {
             //TODO: Установить сообщение о ошибке авторизации пользователя
+            
         }
         
         if (!serverResult.IsValid)
@@ -116,13 +118,13 @@ public partial class MainViewModel : ObservableObject
 
     private Tuple<bool, string> ValidateAccount(string text)
     {
-        var result = text.Length >= 1;
-        return new Tuple<bool, string>(result, result ? "" : messageUserName);
+        _validationResult = text.Length >= 1;
+        return new Tuple<bool, string>(_validationResult, _validationResult ? "" : messageUserName);
     }
 
     private Tuple<bool, string> ValidatePassword(string text)
     {
-        var result = text.Length >= 1;
-        return new Tuple<bool, string>(result, result ? "" : messagePassword);
+        _validationResult = text.Length >= 1;
+        return new Tuple<bool, string>(_validationResult, _validationResult ? "" : messagePassword);
     }
 }

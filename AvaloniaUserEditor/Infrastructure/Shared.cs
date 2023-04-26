@@ -15,7 +15,7 @@ public class Shared: IShared
     public Shared()
     {
         JsonSetting = new RefitSettings(new NewtonsoftJsonContentSerializer());
-        Api = RestService.For<IApi>("http://172.24.2.14 :8000", JsonSetting);
+        Api = RestService.For<IApi>("http://172.24.2.14:8000", JsonSetting);
     }
     public ValidateUserResult ValidateUser(string name, string password)
     {
