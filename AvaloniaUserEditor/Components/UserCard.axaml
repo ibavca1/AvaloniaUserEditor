@@ -7,9 +7,10 @@
 
     <Style Selector="controls|UserCard">
         <!-- Set Defaults -->
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <TextBlock Text="Templated Control" />
+                <TextBlock x:Name="PART_TextCommand" Text="{TemplateBinding Text}" />
             </ControlTemplate>
         </Setter>
     </Style>
